@@ -454,6 +454,28 @@ void main() {
       expect(pic, equals(pic1));
     });
 
+    //https://github.com/NiKoTron/dart-tags/issues/3
+    test('Wrong APIC tags decoding on on Other picture type.', () async {
+      final pic1 = AttachedPicture(
+          'image/jpeg', 0x00, 'foo.jpg', picture.readAsBytesSync());
+
+      final tag = Tag()
+        ..tags = {'picture': pic1}
+        ..type = 'ID3'
+        ..version = '2.4';
+
+      final writer = ID3V2Writer();
+
+      final blocks = writer.write(await file2.readAsBytes(), tag);
+
+      final r = ID3V2Reader();
+      final f = await r.read(blocks);
+
+      // ignore: avoid_as
+      final AttachedPicture pic = (f.tags['picture'] as Map).values.first;
+      expect(pic, equals(pic1));
+    });
+
     //https://github.com/NiKoTron/dart-tags/issues/13
     test('Wrong utf16 decoding', () async {
       final expectedArtist = 'Полина Гагарина&Егор Крид';
