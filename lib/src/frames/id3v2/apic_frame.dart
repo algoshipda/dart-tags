@@ -72,7 +72,7 @@ class ApicFrame with ID3V2Frame<AttachedPicture> {
     final splitIndex2 = enc is UTF16
         ? indexOfSplitPattern(
             data.sublist(splitIndex1 + 1), [0x00, 0x00], splitIndex1)
-        : data.sublist(splitIndex1 + 1).indexOf(0x00) + splitIndex1 + 1;
+        : data.sublist(splitIndex1 + 2).indexOf(0x00) + splitIndex1 + 2;
 
     final description = enc.decode(data.sublist(splitIndex1 + 2, splitIndex2));
 
